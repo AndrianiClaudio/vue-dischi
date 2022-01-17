@@ -1,11 +1,14 @@
 <template>
   <main class="main">
-    <div class="container">
+    <div class="container" v-if="dataLoad">
       <Card
         v-for="(card, index) in cards"
         :key="index"
         :card = card
       />
+    </div>
+    <div class="container" v-else>
+      <Loader />
     </div>
   </main>
 </template>
@@ -13,16 +16,19 @@
 <script>
 import axios from 'axios';
 import Card from './Card.vue';
+import Loader from './Loader.vue';
 
 export default {
   name: 'Main',
   components: {
     Card,
+    Loader,
   },
   data() {
     return {
       queryApi: 'https://flynn.boolean.careers/exercises/api/array/music',
       cards: Object,
+      dataLoad: false,
     };
   },
   mounted() {
@@ -32,6 +38,8 @@ export default {
       })
       .catch((err) => {
         console.log(err);
+      }).then(() => {
+        this.dataLoad = true;
       });
   },
 };
@@ -41,6 +49,8 @@ export default {
 @import "../assets/scss/partials/_variables.scss";
 
 .main {
+  min-height: calc(100vh - 80px);
+  height: 100%;
   background-color: $mainBgColor;
   .container {
     display: flex;
