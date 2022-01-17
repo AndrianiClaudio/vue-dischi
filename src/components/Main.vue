@@ -32,8 +32,6 @@ export default {
       })
       .catch((err) => {
         console.log(err);
-      }).then(() => {
-        console.log(this.cards.length);
       });
   },
 };
@@ -45,6 +43,9 @@ export default {
 .main {
   background-color: $mainBgColor;
   .container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
     width: 60%;
     margin: 0 auto;
     padding: 3.5rem 0;

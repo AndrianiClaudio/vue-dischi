@@ -15,4 +15,19 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.card {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex-basis: calc(100% / 5 - 2rem);
+  align-items: center;
+  h2 {
+    text-align: center;
+  }
+  img {
+    height: 150px;
+    width: 150px;
+  }
+}
+</style>
