@@ -18,13 +18,13 @@ export default {
   background-color: $headerBgColor;
   .container {
     display: flex;
-    height: 80px;
     align-items: center;
+    height: 80px;
     padding-left: 1rem;
       .logo {
         height: 50px;
-        background-color: black;
         border-radius: 50%;
+        background-color: black;
       }
   }
 }
