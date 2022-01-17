@@ -2,7 +2,10 @@
   <div class="card">
       <img :src="card.poster" alt="IMG">
       <h2>{{card.title}}</h2>
-      <span>{{card.author}}</span>
+      <div class="sub-info">
+        <span>{{card.author}}</span>
+        <span>{{card.year}}</span>
+      </div>
   </div>
 </template>
 
@@ -16,18 +19,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/scss/partials/_variables.scss";
 .card {
+  background-color: $cardBgColor;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  flex-basis: calc(100% / 5 - 2rem);
+  flex-basis: calc(100% / 5 - 1.5rem);
   align-items: center;
-  h2 {
-    text-align: center;
-  }
+  padding: 1.25rem;
+  gap: 0.75rem;
   img {
     height: 150px;
     width: 150px;
+  }
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+  }
+  .sub-info {
+    span {
+      display: block;
+      text-align: center;
+      color: grey;
+      font-size:0.95rem;
+    }
   }
 }
 </style>

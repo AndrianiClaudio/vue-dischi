@@ -44,11 +44,12 @@ export default {
   background-color: $mainBgColor;
   .container {
     display: flex;
-    gap: 2rem;
+    justify-content: space-between;
     flex-wrap: wrap;
     width: 60%;
     margin: 0 auto;
     padding: 3.5rem 0;
+    gap: 1.5rem;
   }
 }
 </style>
