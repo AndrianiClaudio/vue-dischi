@@ -24,8 +24,7 @@ export default {
   background-color: $cardBgColor;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  flex-basis: calc(100% / 5 - 1.5rem);
+  flex-basis: calc(100% / 5 - 2rem);
   align-items: center;
   padding: 1.25rem;
   gap: 0.75rem;
