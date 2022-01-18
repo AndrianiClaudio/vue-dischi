@@ -59,16 +59,16 @@ export default {
       if (i === 0 || this.tmp) {
         this.cards = this.tmp;
       }
-      if (type === 'gender') {
-        if (i !== 0) {
+      if (i !== 0) {
+        if (type === 'gender') {
           this.selectCards = this.cards.filter((el) => el.genre === this.selectGender[i]);
           this.tmp = this.cards;
           this.cards = this.selectCards;
+        } else if (type === 'artist') {
+          this.selectCards = this.cards.filter((el) => el.author === this.selectArtist[i]);
+          this.tmp = this.cards;
+          this.cards = this.selectCards;
         }
-      } else if (type === 'artist') {
-        this.selectCards = this.cards.filter((el) => el.author === this.selectArtist[i]);
-        this.tmp = this.cards;
-        this.cards = this.selectCards;
       }
     },
     changeSelectedGen(i) {
