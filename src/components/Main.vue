@@ -2,9 +2,7 @@
   <main class="main">
     <div class="container" v-if="dataLoad">
       <div class="select-container">
-        <select name="select-gender" id="select-gender"
-        @change="filterByGender"
-        >
+        <select name="select-gender" id="select-gender">
           <option v-for="(opt,index) in selectGender"
           :key="index" @click="changeSelected(index)">{{opt}}</option>
         </select>
@@ -38,18 +36,33 @@ export default {
       cards: Object,
       dataLoad: false,
       genderSelectIndex: [],
-      selectGender: ['all', 'rock', 'pop', 'jazz', 'metal'],
-      selectGenderIndex: 0,
+      selectGender: ['all', 'Rock', 'Pop', 'Jazz', 'Metal'],
+      selectGenderInd: 0,
+      selectCards: null,
+      tmp: null,
     };
   },
   methods: {
+    filterEl(i) {
+      if (i === 0 || this.tmp) {
+        this.cards = this.tmp;
+      }
+      if (i !== 0) {
+        // console.log(this.selectGender[i]);
+        this.selectCards = this.cards.filter((el) => el.genre === this.selectGender[i]);
+        this.tmp = this.cards;
+        this.cards = this.selectCards;
+      }
+    },
     changeSelected(i) {
-      this.selectGenderIndex = i;
-      console.log(this.selectGenderIndex);
+      this.selectGenderInd = i;
+      this.filterEl(this.selectGenderInd);
     },
     filterByGender() {
-      this.cards = this.cards.filter((el) => el.genre === 'Rock');
-      console.log(this.genderSelectIndex);
+      console.log(this.selectGenderInd);
+      this.cards = this.cards.filter((el) => el.genre === this.selectGender[this.selectGenderInd]);
+      // this.changeSelected();
+      // console.log(this.genderSelectInd);
     },
   },
   mounted() {
