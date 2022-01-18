@@ -3,12 +3,10 @@
     <div class="container" v-if="dataLoad">
       <div class="select-container">
         <select name="select-gender" id="select-gender"
-        @change="filterByGender">
-          <option value="all">All</option>
-          <option value="rock">Rock</option>
-          <option value="pop">Pop</option>
-          <option value="jazz">Jazz</option>
-          <option value="metal">Metal</option>
+        @change="filterByGender"
+        >
+          <option v-for="(opt,index) in selectGender"
+          :key="index" @click="changeSelected(index)">{{opt}}</option>
         </select>
       </div>
       <Card
@@ -39,11 +37,19 @@ export default {
       queryApi: 'https://flynn.boolean.careers/exercises/api/array/music',
       cards: Object,
       dataLoad: false,
+      genderSelectIndex: [],
+      selectGender: ['all', 'rock', 'pop', 'jazz', 'metal'],
+      selectGenderIndex: 0,
     };
   },
   methods: {
+    changeSelected(i) {
+      this.selectGenderIndex = i;
+      console.log(this.selectGenderIndex);
+    },
     filterByGender() {
-      console.log('in filter');
+      this.cards = this.cards.filter((el) => el.genre === 'Rock');
+      console.log(this.genderSelectIndex);
     },
   },
   mounted() {
