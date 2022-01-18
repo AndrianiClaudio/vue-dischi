@@ -2,9 +2,19 @@
   <main class="main">
     <div class="container" v-if="dataLoad">
       <div class="select-container">
+        <label for="select-gender">
+          Genere
+        </label>
         <select name="select-gender" id="select-gender">
           <option v-for="(opt,index) in selectGender"
-          :key="index" @click="changeSelected(index)">{{opt}}</option>
+          :key="index" @click="changeSelectedGen(index)">{{opt}}</option>
+        </select>
+        <label for="select-artist">
+          Artisti
+        </label>
+        <select name="select-artist" id="select-artist">
+          <option v-for="(opt,index) in selectArtist"
+          :key="index" @click="changeSelectedArt(index)">{{opt}}</option>
         </select>
       </div>
       <Card
@@ -35,34 +45,56 @@ export default {
       queryApi: 'https://flynn.boolean.careers/exercises/api/array/music',
       cards: Object,
       dataLoad: false,
-      genderSelectIndex: [],
-      selectGender: ['all', 'Rock', 'Pop', 'Jazz', 'Metal'],
+      // selectGender: ['all', 'Rock', 'Pop', 'Jazz', 'Metal'],
+      selectGender: ['all'],
+      selectArtist: ['all'],
       selectGenderInd: 0,
+      selectArtistInd: 0,
       selectCards: null,
       tmp: null,
     };
   },
   methods: {
-    filterEl(i) {
+    filterEl(i, type) {
       if (i === 0 || this.tmp) {
         this.cards = this.tmp;
       }
-      if (i !== 0) {
-        // console.log(this.selectGender[i]);
-        this.selectCards = this.cards.filter((el) => el.genre === this.selectGender[i]);
+      if (type === 'gender') {
+        if (i !== 0) {
+          this.selectCards = this.cards.filter((el) => el.genre === this.selectGender[i]);
+          this.tmp = this.cards;
+          this.cards = this.selectCards;
+        }
+      } else if (type === 'artist') {
+        this.selectCards = this.cards.filter((el) => el.author === this.selectArtist[i]);
         this.tmp = this.cards;
         this.cards = this.selectCards;
       }
     },
-    changeSelected(i) {
+    changeSelectedGen(i) {
       this.selectGenderInd = i;
-      this.filterEl(this.selectGenderInd);
+      this.filterEl(this.selectGenderInd, 'gender');
+    },
+    changeSelectedArt(i) {
+      this.selectArtistInd = i;
+      this.filterEl(this.selectArtistInd, 'artist');
     },
     filterByGender() {
-      console.log(this.selectGenderInd);
       this.cards = this.cards.filter((el) => el.genre === this.selectGender[this.selectGenderInd]);
-      // this.changeSelected();
-      // console.log(this.genderSelectInd);
+    },
+    setSelectGender() {
+      this.cards.forEach((element) => {
+        if (!this.selectGender.includes(element.genre)) {
+          this.selectGender.push(element.genre);
+        }
+      });
+    },
+    setSelectArtist() {
+      this.cards.forEach((element) => {
+        if (!this.selectArtist.includes(element.author)) {
+          this.selectArtist.push(element.author);
+        }
+      });
     },
   },
   mounted() {
@@ -74,6 +106,8 @@ export default {
         console.log(err);
       }).then(() => {
         this.dataLoad = true;
+        this.setSelectGender();
+        this.setSelectArtist();
       });
   },
 };
@@ -102,7 +136,13 @@ export default {
     .select-container {
       width: 100%;
       text-align: center;
-      #select-gender {
+      label {
+        color: white;
+        text-transform: uppercase;
+        display: block;
+      }
+      #select-gender,
+      #select-artist {
         width: 10rem;
         padding: .5rem;
         text-align: center;
