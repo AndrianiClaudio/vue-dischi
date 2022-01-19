@@ -2,24 +2,20 @@
   <main class="main">
     <div class="container" v-if="dataLoad">
       <div class="select-container">
-        <label for="select-gender">
-          Genere
-        </label>
-        <select name="select-gender" id="select-gender">
-          <option v-for="(opt,index) in selectGender"
-          :key="index" @click="changeSelectedGen(index)">{{opt}}</option>
-        </select>
-        <label for="select-artist">
-          Artisti
-        </label>
-        <select name="select-artist" id="select-artist">
-          <option v-for="(opt,index) in selectArtist"
-          :key="index" @click="changeSelectedArt(index)">{{opt}}</option>
-        </select>
+        <Select
+        :cards = cards
+        type = gender
+        @filter-gender= 'changeIndex($event,"gender")'
+        />
+        <Select
+        :cards = cards
+        type = artist
+        @filter-artist= 'changeIndex($event,"artist")'
+        />
       </div>
       <Card
-        v-for="(card, index) in cards"
-        :key="index"
+        v-for="(card, index) in filter_var"
+        :key="'card'+index"
         :card = card
       />
     </div>
@@ -33,68 +29,48 @@
 import axios from 'axios';
 import Card from './Card.vue';
 import Loader from './Loader.vue';
+import Select from './Select.vue';
 
 export default {
   name: 'Main',
   components: {
     Card,
     Loader,
+    Select,
   },
   data() {
     return {
       queryApi: 'https://flynn.boolean.careers/exercises/api/array/music',
       cards: Object,
       dataLoad: false,
-      // selectGender: ['all', 'Rock', 'Pop', 'Jazz', 'Metal'],
-      selectGender: ['all'],
-      selectArtist: ['all'],
-      selectGenderInd: 0,
-      selectArtistInd: 0,
-      selectCards: null,
-      tmp: null,
+      filter_var: Object,
     };
   },
   methods: {
-    filterEl(i, type) {
-      if (i === 0 || this.tmp) {
-        this.cards = this.tmp;
+    filter(checkEl, type) {
+      // console.log(checkEl, type, 'filter');
+      switch (type) {
+        case 'gender':
+          this.filter_var = this.cards.filter((el) => el.genre === checkEl);
+          break;
+        case 'artist':
+          this.filter_var = this.cards.filter((el) => el.artist === checkEl);
+          break;
+        default:
+          console.log('errore... switch select type in default case');
+          break;
       }
-      if (i !== 0) {
-        if (type === 'gender') {
-          this.selectCards = this.cards.filter((el) => el.genre === this.selectGender[i]);
-          this.tmp = this.cards;
-          this.cards = this.selectCards;
-        } else if (type === 'artist') {
-          this.selectCards = this.cards.filter((el) => el.author === this.selectArtist[i]);
-          this.tmp = this.cards;
-          this.cards = this.selectCards;
+      this.filter_var = this.cards.filter((el) => {
+        if (type === 'artist') {
+          return el.author === checkEl;
+        } if (type === 'gender') {
+          return el.genre === checkEl;
         }
-      }
-    },
-    changeSelectedGen(i) {
-      this.selectGenderInd = i;
-      this.filterEl(this.selectGenderInd, 'gender');
-    },
-    changeSelectedArt(i) {
-      this.selectArtistInd = i;
-      this.filterEl(this.selectArtistInd, 'artist');
-    },
-    filterByGender() {
-      this.cards = this.cards.filter((el) => el.genre === this.selectGender[this.selectGenderInd]);
-    },
-    setSelectGender() {
-      this.cards.forEach((element) => {
-        if (!this.selectGender.includes(element.genre)) {
-          this.selectGender.push(element.genre);
-        }
+        return console.error('errore!!!fun_filter in Main.vue');
       });
     },
-    setSelectArtist() {
-      this.cards.forEach((element) => {
-        if (!this.selectArtist.includes(element.author)) {
-          this.selectArtist.push(element.author);
-        }
-      });
+    changeIndex(e, type) {
+      if (e === 'all') { this.filter_var = this.cards; } else { this.filter(e, type); }
     },
   },
   mounted() {
@@ -105,9 +81,8 @@ export default {
       .catch((err) => {
         console.log(err);
       }).then(() => {
+        this.filter_var = this.cards;
         this.dataLoad = true;
-        this.setSelectGender();
-        this.setSelectArtist();
       });
   },
 };
@@ -122,7 +97,6 @@ export default {
   min-height: calc(100vh - 80px);
   justify-content:center;
   height: 100%;
-  // flex-direction: column;
   padding-top: 3rem;
   background-color: $mainBgColor;
   .container {
@@ -141,14 +115,7 @@ export default {
         text-transform: uppercase;
         display: block;
       }
-      #select-gender,
-      #select-artist {
-        width: 10rem;
-        padding: .5rem;
-        text-align: center;
-        font-size: 1.15rem;
-      }
-    }
+ }
   }
 }
 </style>
